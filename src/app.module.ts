@@ -37,16 +37,13 @@ import { AiModule } from './ai/ai.module';
     }),
 
     // Redis / Bull queue
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        redis: {
-          host: config.get('REDIS_HOST', 'localhost'),
-          port: config.get<number>('REDIS_PORT', 6379),
-          password: config.get('REDIS_PASSWORD') || undefined,
+    BullModule.forRoot({
+      url: process.env.REDIS_URL,
+      redis: {
+        tls: {
+          rejectUnauthorized: false,
         },
-      }),
+      },
     }),
 
     // Scheduling

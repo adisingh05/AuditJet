@@ -13,6 +13,9 @@ export enum FrameworkType {
   HIPAA = 'HIPAA',
   PCI_DSS = 'PCI_DSS',
   NIST = 'NIST',
+  DPDP = 'DPDP',
+  RBI = 'RBI',
+  SEBI = 'SEBI',
   CUSTOM = 'CUSTOM',
 }
 

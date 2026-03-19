@@ -194,6 +194,244 @@ const FRAMEWORK_TEMPLATES = {
       },
     ],
   },
+  [FrameworkType.DPDP]: {
+    name: 'Digital Personal Data Protection Act 2023',
+    description:
+      "India's Digital Personal Data Protection Act 2023 - Compliance Framework",
+    controls: [
+      {
+        controlId: 'DPDP-1',
+        name: 'Consent Management',
+        category: 'Data Principal Rights',
+        description:
+          'Obtain free, specific, informed and unambiguous consent from Data Principals before processing personal data.',
+      },
+      {
+        controlId: 'DPDP-2',
+        name: 'Notice to Data Principal',
+        category: 'Data Principal Rights',
+        description:
+          'Provide clear and plain language notice to Data Principals about personal data being collected and the purpose of processing.',
+      },
+      {
+        controlId: 'DPDP-3',
+        name: 'Purpose Limitation',
+        category: 'Data Processing',
+        description:
+          'Process personal data only for the specified, explicit and legitimate purpose for which consent was obtained.',
+      },
+      {
+        controlId: 'DPDP-4',
+        name: 'Data Minimisation',
+        category: 'Data Processing',
+        description:
+          'Collect only such personal data that is necessary for the specified purpose of processing.',
+      },
+      {
+        controlId: 'DPDP-5',
+        name: 'Data Accuracy',
+        category: 'Data Quality',
+        description:
+          'Ensure personal data is accurate and updated. Take reasonable steps to ensure data is correct and not misleading.',
+      },
+      {
+        controlId: 'DPDP-6',
+        name: 'Storage Limitation',
+        category: 'Data Retention',
+        description:
+          'Retain personal data only as long as necessary for the specified purpose. Delete data after purpose is fulfilled.',
+      },
+      {
+        controlId: 'DPDP-7',
+        name: 'Right to Access',
+        category: 'Data Principal Rights',
+        description:
+          'Enable Data Principals to access summary of personal data being processed and processing activities undertaken.',
+      },
+      {
+        controlId: 'DPDP-8',
+        name: 'Right to Correction & Erasure',
+        category: 'Data Principal Rights',
+        description:
+          'Enable Data Principals to correct inaccurate personal data and erase personal data where consent is withdrawn.',
+      },
+      {
+        controlId: 'DPDP-9',
+        name: 'Right to Grievance Redressal',
+        category: 'Data Principal Rights',
+        description:
+          'Establish effective grievance redressal mechanism for Data Principals to raise complaints within 48 hours.',
+      },
+      {
+        controlId: 'DPDP-10',
+        name: 'Data Fiduciary Obligations',
+        category: 'Organisational Measures',
+        description:
+          'Fulfil all obligations as a Data Fiduciary including security safeguards, breach notification and accountability.',
+      },
+      {
+        controlId: 'DPDP-11',
+        name: 'Personal Data Breach Notification',
+        category: 'Incident Management',
+        description:
+          'Notify the Data Protection Board and affected Data Principals of any personal data breach without delay.',
+      },
+      {
+        controlId: 'DPDP-12',
+        name: 'Data Localisation',
+        category: 'Data Residency',
+        description:
+          'Ensure certain categories of personal data are stored and processed only within the territory of India.',
+      },
+      {
+        controlId: 'DPDP-13',
+        name: "Children's Data Protection",
+        category: 'Special Categories',
+        description:
+          'Obtain verifiable parental consent before processing personal data of children below 18 years of age.',
+      },
+      {
+        controlId: 'DPDP-14',
+        name: 'Significant Data Fiduciary Obligations',
+        category: 'Organisational Measures',
+        description:
+          'If classified as Significant Data Fiduciary, appoint a Data Protection Officer and conduct Data Protection Impact Assessment.',
+      },
+      {
+        controlId: 'DPDP-15',
+        name: 'Cross-Border Data Transfer',
+        category: 'Data Transfer',
+        description:
+          'Ensure cross-border transfer of personal data is only to countries notified by the Central Government.',
+      },
+    ],
+  },
+  [FrameworkType.RBI]: {
+    name: 'RBI IT Security Framework',
+    description:
+      'Reserve Bank of India IT Security Framework for Regulated Entities',
+    controls: [
+      {
+        controlId: 'RBI-1',
+        name: 'IT Governance',
+        category: 'Governance',
+        description:
+          'Establish IT governance framework with Board oversight and IT Strategy Committee.',
+      },
+      {
+        controlId: 'RBI-2',
+        name: 'Information Security Policy',
+        category: 'Policy',
+        description:
+          'Formulate and implement comprehensive Information Security Policy approved by the Board.',
+      },
+      {
+        controlId: 'RBI-3',
+        name: 'Cyber Security Policy',
+        category: 'Policy',
+        description:
+          'Implement a robust Cyber Security Policy addressing current and emerging cyber threats.',
+      },
+      {
+        controlId: 'RBI-4',
+        name: 'IT Risk Management',
+        category: 'Risk Management',
+        description:
+          'Implement IT Risk Management framework to identify, assess and mitigate IT risks.',
+      },
+      {
+        controlId: 'RBI-5',
+        name: 'Data Security & Privacy',
+        category: 'Data Protection',
+        description:
+          'Ensure customer data privacy and implement data security controls across all systems.',
+      },
+      {
+        controlId: 'RBI-6',
+        name: 'Business Continuity Planning',
+        category: 'Resilience',
+        description:
+          'Implement BCP and Disaster Recovery with RTO/RPO targets approved by the Board.',
+      },
+      {
+        controlId: 'RBI-7',
+        name: 'Cyber Incident Response',
+        category: 'Incident Management',
+        description:
+          'Establish Cyber Crisis Management Plan and report incidents to RBI within prescribed timelines.',
+      },
+      {
+        controlId: 'RBI-8',
+        name: 'Vendor Risk Management',
+        category: 'Third Party Risk',
+        description:
+          'Assess and manage risks from IT vendors and outsourced service providers.',
+      },
+      {
+        controlId: 'RBI-9',
+        name: 'Audit Trail & Logging',
+        category: 'Monitoring',
+        description:
+          'Maintain audit trails for all critical systems and ensure logs are tamper-proof.',
+      },
+      {
+        controlId: 'RBI-10',
+        name: 'Network Security',
+        category: 'Technical Controls',
+        description:
+          'Implement network security controls including firewalls, IDS/IPS and network segmentation.',
+      },
+    ],
+  },
+  [FrameworkType.SEBI]: {
+    name: 'SEBI Cyber Security & Cyber Resilience Framework',
+    description:
+      'SEBI CSCRF for Regulated Entities in Indian Securities Market',
+    controls: [
+      {
+        controlId: 'SEBI-1',
+        name: 'Cyber Security Governance',
+        category: 'Governance',
+        description:
+          'Establish cyber security governance with designated Chief Information Security Officer (CISO).',
+      },
+      {
+        controlId: 'SEBI-2',
+        name: 'Asset Management',
+        category: 'Asset Management',
+        description:
+          'Maintain inventory of all critical assets and classify them based on sensitivity.',
+      },
+      {
+        controlId: 'SEBI-3',
+        name: 'Access Control',
+        category: 'Technical Controls',
+        description:
+          'Implement role-based access control and privileged access management.',
+      },
+      {
+        controlId: 'SEBI-4',
+        name: 'Vulnerability Assessment & Penetration Testing',
+        category: 'Technical Controls',
+        description:
+          'Conduct VAPT at least once a year and address critical vulnerabilities within 30 days.',
+      },
+      {
+        controlId: 'SEBI-5',
+        name: 'Cyber Incident Reporting',
+        category: 'Incident Management',
+        description:
+          'Report cyber incidents to SEBI within 6 hours of detection.',
+      },
+      {
+        controlId: 'SEBI-6',
+        name: 'Cyber Resilience',
+        category: 'Resilience',
+        description:
+          'Implement cyber resilience measures including backup, recovery and business continuity.',
+      },
+    ],
+  },
 };
 
 @Injectable()
@@ -219,17 +457,21 @@ export class ComplianceService {
       HIPAA: 'Health Insurance Portability and Accountability Act',
       PCI_DSS: 'Payment Card Industry Data Security Standard',
       NIST: 'NIST Cybersecurity Framework',
+      DPDP: 'Digital Personal Data Protection Act 2023',
+      RBI: 'RBI IT Security Framework',
+      SEBI: 'SEBI Cyber Security & Cyber Resilience Framework',
       CUSTOM: 'Custom Framework',
     };
 
     const framework = this.frameworkRepo.create({
       type,
-      name: customData?.name || frameworkNames[type] || type,
+      name: customData?.name || template?.name || frameworkNames[type] || type,
       description:
         customData?.description ||
+        template?.description ||
         `${frameworkNames[type] || type} compliance framework`,
     });
-    
+
     const saved = await this.frameworkRepo.save(framework);
 
     if (template?.controls) {

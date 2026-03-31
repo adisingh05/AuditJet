@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { ComplianceFramework } from "@/types";
-import { getScoreColor } from "@/lib/utils";
+import { getScoreColor, getScoreBg } from "@/lib/utils";
 
 const availableFrameworks = [
   { type: "SOC2", label: "SOC2", flag: "🔐" },
@@ -18,10 +18,10 @@ const availableFrameworks = [
 ];
 
 export default function CompliancePage() {
-  const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
+  const [frameworks, setFrameworks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
-  const [selected, setSelected] = useState<ComplianceFramework | null>(null);
+  const [selected, setSelected] = useState<any | null>(null);
   const [controls, setControls] = useState<any[]>([]);
 
   useEffect(() => {
@@ -31,7 +31,20 @@ export default function CompliancePage() {
   const fetchFrameworks = async () => {
     try {
       const { data } = await api.get("/compliance/frameworks");
-      setFrameworks(data);
+      // Fetch stats for each framework
+      const withStats = await Promise.all(
+        data.map(async (fw: ComplianceFramework) => {
+          try {
+            const { data: detail } = await api.get(
+              `/compliance/frameworks/${fw.id}`,
+            );
+            return { ...fw, stats: detail.stats };
+          } catch {
+            return fw;
+          }
+        }),
+      );
+      setFrameworks(withStats);
     } catch (err) {
       console.error(err);
     } finally {
@@ -51,11 +64,11 @@ export default function CompliancePage() {
     }
   };
 
-  const viewFramework = async (framework: ComplianceFramework) => {
+  const viewFramework = async (framework: any) => {
     setSelected(framework);
     try {
       const { data } = await api.get(`/compliance/frameworks/${framework.id}`);
-      setSelected(data);
+      setSelected({ ...framework, stats: data.stats });
       setControls(data.controls || []);
     } catch (err) {
       console.error(err);
@@ -68,6 +81,16 @@ export default function CompliancePage() {
       setControls((prev) =>
         prev.map((c) => (c.id === id ? { ...c, status } : c)),
       );
+      // Refresh framework stats after updating control
+      if (selected) {
+        const { data } = await api.get(`/compliance/frameworks/${selected.id}`);
+        setSelected((prev: any) => ({ ...prev, stats: data.stats }));
+        setFrameworks((prev) =>
+          prev.map((f) =>
+            f.id === selected.id ? { ...f, stats: data.stats } : f,
+          ),
+        );
+      }
     } catch (err) {
       console.error(err);
     }
@@ -178,6 +201,7 @@ export default function CompliancePage() {
               (f) => f.type === framework.type,
             );
             const isIndia = ["DPDP", "RBI", "SEBI"].includes(framework.type);
+            const score = framework.stats?.score || 0;
             return (
               <div
                 key={framework.id}
@@ -208,16 +232,25 @@ export default function CompliancePage() {
                 <p className="text-gray-400 text-sm line-clamp-2">
                   {framework.description}
                 </p>
+
+                {/* Progress Bar — Now shows real data! */}
                 <div className="mt-4">
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-gray-400">Progress</span>
-                    <span className={getScoreColor(0)}>0%</span>
+                    <span className={getScoreColor(score)}>{score}%</span>
                   </div>
-                  <div className="h-1.5 bg-gray-800 rounded-full">
+                  <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
                     <div
-                      className="h-1.5 rounded-full bg-gray-600"
-                      style={{ width: "0%" }}
+                      className="h-1.5 rounded-full transition-all duration-500"
+                      style={{
+                        width: `${score}%`,
+                        backgroundColor: getScoreBg(score),
+                      }}
                     />
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-600 mt-1">
+                    <span>{framework.stats?.implemented || 0} implemented</span>
+                    <span>{framework.stats?.total || 0} total controls</span>
                   </div>
                 </div>
               </div>
@@ -229,7 +262,7 @@ export default function CompliancePage() {
       {/* Controls Panel */}
       {selected && (
         <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-white font-semibold text-lg">
                 {selected.name}
@@ -238,16 +271,47 @@ export default function CompliancePage() {
                 {controls.length} controls
               </p>
             </div>
-            <button
-              onClick={() => {
-                setSelected(null);
-                setControls([]);
-              }}
-              className="text-gray-400 hover:text-white text-sm bg-gray-800 px-3 py-1.5 rounded-lg"
-            >
-              ✕ Close
-            </button>
+            <div className="flex items-center gap-4">
+              {/* Live score inside controls panel */}
+              <div className="text-right">
+                <p
+                  className={`text-2xl font-bold ${getScoreColor(selected.stats?.score || 0)}`}
+                >
+                  {selected.stats?.score || 0}%
+                </p>
+                <p className="text-gray-500 text-xs">compliance score</p>
+              </div>
+              <button
+                onClick={() => {
+                  setSelected(null);
+                  setControls([]);
+                }}
+                className="text-gray-400 hover:text-white text-sm bg-gray-800 px-3 py-1.5 rounded-lg"
+              >
+                ✕ Close
+              </button>
+            </div>
           </div>
+
+          {/* Mini progress bar inside controls panel */}
+          <div className="mb-6">
+            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div
+                className="h-2 rounded-full transition-all duration-500"
+                style={{
+                  width: `${selected.stats?.score || 0}%`,
+                  backgroundColor: getScoreBg(selected.stats?.score || 0),
+                }}
+              />
+            </div>
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>✅ {selected.stats?.implemented || 0} implemented</span>
+              <span>🔄 {selected.stats?.inProgress || 0} in progress</span>
+              <span>❌ {selected.stats?.failed || 0} failed</span>
+              <span>⏳ {selected.stats?.notStarted || 0} not started</span>
+            </div>
+          </div>
+
           <div className="space-y-3">
             {controls.map((control) => (
               <div
@@ -272,7 +336,9 @@ export default function CompliancePage() {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(control.status)}`}
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                      control.status,
+                    )}`}
                   >
                     {control.status.replace("_", " ")}
                   </span>

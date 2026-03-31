@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import {
   LayoutDashboard,
   Shield,
@@ -15,8 +16,12 @@ import {
   LogOut,
   ChevronRight,
   Building2,
+  Sun,
+  Moon,
+  Users,          
 } from "lucide-react";
 
+// navItems must be OUTSIDE component — this is correct
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/compliance", label: "Compliance", icon: Shield },
@@ -25,12 +30,17 @@ const navItems = [
   { href: "/dashboard/audit", label: "Audit Logs", icon: ClipboardList },
   { href: "/dashboard/ai-chat", label: "AI Assistant", icon: Bot },
   { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
+  { href: "/dashboard/users", label: "Users", icon: Users },
+  { href: "/dashboard/reports", label: "Reports", icon: FileText },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuthStore();
+
+  // useTheme MUST be inside the component function ✅
+  const { theme, setTheme } = useTheme();
 
   const handleLogout = () => {
     logout();
@@ -65,7 +75,7 @@ export default function Sidebar() {
           const Icon = item.icon;
           const active = isActive(item.href);
           return (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} onClick={() => onClose?.()}>
               <motion.div
                 whileHover={{ x: 2 }}
                 whileTap={{ scale: 0.98 }}
@@ -76,7 +86,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Icon
-                  className={`w-4.5 h-4.5 shrink-0 ${active ? "text-blue-400" : "text-gray-500 group-hover:text-gray-300"}`}
+                  className={`shrink-0 ${active ? "text-blue-400" : "text-gray-500 group-hover:text-gray-300"}`}
                   size={18}
                 />
                 <span className="text-sm font-medium">{item.label}</span>
@@ -88,6 +98,26 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Theme Toggle */}
+      <div className="px-3 pb-2">
+        <button
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/60 transition-all duration-150 text-sm"
+        >
+          {theme === "dark" ? (
+            <>
+              <Sun size={16} />
+              <span>Light Mode</span>
+            </>
+          ) : (
+            <>
+              <Moon size={16} />
+              <span>Dark Mode</span>
+            </>
+          )}
+        </button>
+      </div>
 
       {/* User Profile */}
       <div className="p-3 border-t border-gray-800/60">

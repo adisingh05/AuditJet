@@ -18,7 +18,8 @@ import {
   Building2,
   Sun,
   Moon,
-  Users,          
+  Users, 
+  CalendarDays         
 } from "lucide-react";
 
 // navItems must be OUTSIDE component — this is correct
@@ -32,6 +33,7 @@ const navItems = [
   { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
   { href: "/dashboard/users", label: "Users", icon: Users },
   { href: "/dashboard/reports", label: "Reports", icon: FileText },
+  { href: "/dashboard/calendar", label: "Calendar", icon: CalendarDays },
 ];
 
 export default function Sidebar({ onClose }: { onClose?: () => void }) {

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import { useAuthStore } from "@/store/auth.store";
-import { Menu, X } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -14,7 +13,6 @@ export default function DashboardLayout({
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -27,47 +25,41 @@ export default function DashboardLayout({
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex min-h-screen bg-gray-950">
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`
-        fixed left-0 top-0 h-screen w-64 z-40 transition-transform duration-300
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0
-      `}
-      >
-        <Sidebar onClose={() => setSidebarOpen(false)} />
-      </aside>
-
-      {/* Main content */}
-      <main className="flex-1 min-h-screen lg:ml-64">
-        {/* Mobile top bar */}
-        <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-gray-950 border-b border-gray-800 sticky top-0 z-20">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-800 transition-colors"
-          >
-            <Menu size={20} />
-          </button>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white text-xs font-bold">C</span>
-            </div>
-            <span className="text-white font-bold text-sm">ComplyGuy</span>
-          </div>
-          <div className="w-9" />
+    <>
+      {/* Mobile block message */}
+      <div className="lg:hidden flex flex-col items-center justify-center min-h-screen bg-gray-950 px-8 text-center">
+        <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6">
+          <span className="text-white text-2xl font-bold">C</span>
         </div>
+        <h1 className="text-white text-2xl font-bold mb-3">ComplyGuy</h1>
+        <p className="text-gray-400 text-sm mb-2">
+          ComplyGuy is optimised for desktop use.
+        </p>
+        <p className="text-gray-500 text-xs">
+          Please open this on a laptop or desktop for the best experience.
+        </p>
+      </div>
 
-        <div className="p-4 md:p-8">{children}</div>
-      </main>
-    </div>
+      {/* Desktop layout */}
+      <div className="hidden lg:flex min-h-screen bg-gray-950">
+        <aside style={{ width: "256px", flexShrink: 0 }}>
+          <div
+            style={{
+              position: "fixed",
+              width: "256px",
+              height: "100vh",
+              top: 0,
+              left: 0,
+              zIndex: 40,
+            }}
+          >
+            <Sidebar />
+          </div>
+        </aside>
+        <main style={{ flex: 1, padding: "32px", minHeight: "100vh" }}>
+          {children}
+        </main>
+      </div>
+    </>
   );
 }

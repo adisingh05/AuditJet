@@ -14,7 +14,8 @@ export class AiService {
     @InjectQueue('ai-tasks') private aiQueue: Queue,
   ) {
     this.openai = new OpenAI({
-      apiKey: config.get('OPENAI_API_KEY'),
+      apiKey: this.config.get('GROQ_API_KEY'),
+      baseURL: 'https://api.groq.com/openai/v1',
     });
   }
 
@@ -42,7 +43,7 @@ Provide a JSON response with:
 }`;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
@@ -77,7 +78,7 @@ Provide a JSON response with:
 }`;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
@@ -112,7 +113,7 @@ Generate a professional executive summary JSON:
 }`;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
@@ -128,7 +129,7 @@ and implement controls.
 ${context ? `Context: ${context}` : ''}`;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message },

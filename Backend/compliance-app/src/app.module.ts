@@ -22,20 +22,23 @@ import { IntegrationsModule } from './integrations/integrations.module';
     // Database
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        host: config.get('DB_HOST', 'localhost'),
+        url: config.get('DATABASE_URL'), 
+        host: config.get('DB_HOST'), 
         port: config.get<number>('DB_PORT', 5432),
-        username: config.get('DB_USERNAME', 'postgres'),
-        password: config.get('DB_PASSWORD', ''),
-        database: config.get('DB_NAME', 'compliance_db'),
+        username: config.get('DB_USERNAME'),
+        password: config.get('DB_PASSWORD'),
+        database: config.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: config.get('NODE_ENV') !== 'production',
-        logging: config.get('NODE_ENV') === 'development',
+        synchronize: true,
+        ssl:
+          config.get('NODE_ENV') === 'production'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
+      inject: [ConfigService],
     }),
-
     // Redis / Bull queue
     BullModule.forRoot({
       url: process.env.REDIS_URL,
